@@ -10,7 +10,7 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import math
 
-device = 'cpu'
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 # torch.device("cuda" if args.cuda else "cpu")
@@ -115,7 +115,7 @@ class VecVAE(nn.Module):
             recon_batch, mu, logvar = self.forward(data)
             loss = self.loss_function(recon_batch, data, mu, logvar, self.input_space, fit, kl_weight)
             loss.backward()
-            r = np.linalg.norm(recon_batch.detach().numpy() - data.detach().numpy(), axis=0)
+            r = np.linalg.norm(recon_batch.detach().cpu().numpy() - data.detach().cpu().numpy(), axis=0)
             train_loss += [r]
             self.optimizer.step()
         per_input_loss = np.vstack(train_loss)

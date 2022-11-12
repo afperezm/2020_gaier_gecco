@@ -19,7 +19,7 @@ def main():
     x = archive[:, 3:]
 
     # -- Train VAE ----------------------------------------------------------------#
-    vae = VecVAE(x.shape[1], nZ)
+    vae = VecVAE(x.shape[1], nZ).to(device)
     vae.loss_function = vae.loss_functionA
     data = vae.dataset(x)
     dataloader = DataLoader(data, batch_size=x.shape[0], shuffle=True, num_workers=1)
