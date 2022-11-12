@@ -1,5 +1,5 @@
 # Python3 Map-Elites (CVT-Map-Elites)
-This is a straighforward implementation of CVT-MAP-Elites in Python3.
+This is a straightforward implementation of CVT-MAP-Elites in Python3.
 
 ## Dependencies
 
