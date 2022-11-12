@@ -45,8 +45,7 @@ def rec_cross(x, archive, params, vae):
         # mean of genome and reconstruction
         recons = vae.getRecon(x)
         y = (recons + x) / 2.0
-        rec = np.clip(y, a_min=params["min"][0:len(y)], \
-                      a_max=params["max"][0:len(y)])
+        rec = np.clip(y, a_min=params["min"][0:len(y)], a_max=params["max"][0:len(y)])
         rec = np.ravel(rec)
         assert (rec.shape == x.shape)
         return rec
@@ -96,7 +95,7 @@ def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
                    gen=0, archive={}, centroids=np.empty(shape=(0, 0)), pool=None,
                    model=VecVAE, latent_length=10, log_file=None, vae_log=None):
     # - Init --------------------------------------------------------------------#
-    if pool == None:
+    if pool is None:
         num_cores = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(num_cores)
 
@@ -111,10 +110,9 @@ def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
     successes = collections.deque(maxlen=params["banditWindow"])
 
     # VAE
-    loss = np.nan;
+    loss = np.nan
     vae = model(dim_x, latent_length)  # get rid of this
-    params["variation"] = lambda x, archive, params: \
-        rec_cross_vec(x, archive, params, vae)
+    params["variation"] = lambda x, archive, params: rec_cross_vec(x, archive, params, vae)
 
     # - Main Loop ---------------------------------------------------------------#
     for i in range(1, int(n_gen / params["trainMod"])):
@@ -141,8 +139,7 @@ def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
         # --- Create VAE Crossover Operator ---------------------------------------#
         with torch.no_grad():
             vae.eval()
-            params["variation"] = lambda x, archive, params: \
-                rec_cross_vec(x, archive, params, vae)
+            params["variation"] = lambda x, archive, params: rec_cross_vec(x, archive, params, vae)
         v_time = time.time() - v_start_time
 
         # - Logging and Reporting -------------------------------------------------#

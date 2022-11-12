@@ -50,7 +50,7 @@ def main():
         centroids = np.loadtxt(archive)  # centroids = np.loadtxt('maps/ring_6.dat')
         n_niches = np.shape(centroids)[0]
     else:
-        centroids = np.empty(shape=(0, 0));
+        centroids = np.empty(shape=(0, 0))
         n_niches = int(archive)
 
     # Set Domain
@@ -64,14 +64,11 @@ def main():
         else:
             d.params["random_init"] = 0.05
         n_gen = 10000
-
-
     elif domain == 'hex':
         from domain.hexa.hexapod import Hex, evaluate
         d = Hex()
-        d.params["random_init"] = 0.05;
+        d.params["random_init"] = 0.05
         n_gen = 50000
-
     else:
         print('Invalid Domain (e.g. hex/arm20/arm200)')
         exit(1)
@@ -97,7 +94,7 @@ def main():
     vae_log = open('vae_log.dat', 'w+')
 
     # Tiny run testing
-    # params["random_init"] = 5./float(n_niches);
+    # params["random_init"] = 5./float(n_niches)
     # n_gen = 3
 
     # -- Test Algorithms ----------------------------------------------------------#
