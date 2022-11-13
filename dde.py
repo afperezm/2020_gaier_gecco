@@ -69,8 +69,12 @@ def main():
         d = Hex()
         d.params["random_init"] = 0.05
         n_gen = 50000
+    elif domain == 'walker':
+        from domain.locomotion.walker import Walker, evaluate_walker as evaluate
+        d = Walker(20230)
+        n_gen = 100000
     else:
-        print('Invalid Domain (e.g. hex/arm20/arm200)')
+        print('Invalid Domain (e.g. hex/arm20/arm200/walker)')
         exit(1)
 
     x_dims = d.x_dims
