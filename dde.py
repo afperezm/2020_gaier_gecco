@@ -93,7 +93,7 @@ def main():
     # Set Logging Hyperparameters
     params["dump_period"] = 100
     params["save_format"] = 'bin'
-    params["print_mod"] = 5
+    params["print_mod"] = 1
     log_file = open('map_elites_log.dat', 'w+')
     vae_log = open('vae_log.dat', 'w+')
 
