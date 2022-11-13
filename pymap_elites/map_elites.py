@@ -62,11 +62,11 @@ def variation_xy(x, z, params):
     assert (len(params["min"]) >= x.shape[0])
     assert (len(params["max"]) >= x.shape[0])
     y = x.copy()
-    b = np.random.normal(0, (params["max"][0] - params["min"][0]) * params['sigma_line'], 1)
+    b = params['sigma_line'] * np.random.normal(0, 1, 1)
     # this could be nicely vectorized
     for i in range(0, len(y)):
         # iso mutation
-        a = np.random.normal(0, (params["max"][i] - params["min"][i]) * params['sigma_iso'], 1)
+        a = params['sigma_iso'] * np.random.normal(0, 1, 1)
         y[i] = y[i] + a
 
         # line mutation
@@ -75,7 +75,7 @@ def variation_xy(x, z, params):
         # else:
         #  b = np.random.normal(0, (params["max"][i]-params["min"][i]) * params['sigma_line'], 1)
 
-        y[i] = y[i] + b * (x[i] - z[i])
+        y[i] = y[i] + b * (z[i] - x[i])
     y_bounded = np.clip(y, a_min=params["min"][0:len(y)], a_max=params["max"][0:len(y)])
     return y_bounded
 
@@ -98,7 +98,7 @@ def gen_to_phen_direct(gen):
 default_params = {
     # more of this -> higher-quality CVT
     "cvt_samples": 25000,
-    # we evaluate in batches to paralleliez
+    # we evaluate in batches to parallelize
     "batch_size": 100,
     # proportion of niches to be filled before starting
     "random_init": 0.1,
@@ -277,7 +277,7 @@ def compute(dim_map, dim_x, f,
         if len(archive) == 0:  # random initialization
             print('init: ', end='', flush=True)
             while init_count <= params['random_init'] * n_niches:
-                for i in range(0, params['random_init_batch']):
+                for _ in range(0, params['random_init_batch']):
                     x = params['random'](dim_x, params)
                     x_bounded = []
                     for i in range(0, len(x)):

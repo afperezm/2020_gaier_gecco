@@ -103,6 +103,7 @@ def main():
 
     # -- Test Algorithms ----------------------------------------------------------#
     if mode == 'map':
+        params["sigma_iso"] = 0.01
         params["sigma_line"] = 0.0
         params["vector_variation"] = False
         map_elites.compute(d.desc_length, d.x_dims, evaluate, params=params,
@@ -110,7 +111,8 @@ def main():
                            log_file=log_file)
 
     if mode == 'line':
-        params["sigma_line"] = 0.1
+        params["sigma_iso"] = 0.01
+        params["sigma_line"] = 0.01
         params["vector_variation"] = False
         map_elites.compute(d.desc_length, d.x_dims, evaluate, params=params,
                            centroids=centroids, n_niches=n_niches, n_gen=n_gen,
