@@ -62,11 +62,11 @@ def variation_xy(x, z, params):
     assert (len(params["min"]) >= x.shape[0])
     assert (len(params["max"]) >= x.shape[0])
     y = x.copy()
-    b = np.random.normal(0, (params["max"][0] - params["min"][0]) * params['sigma_line'], 1)
+    b = params['sigma_line'] * np.random.normal(0, 1, 1)
     # this could be nicely vectorized
     for i in range(0, len(y)):
         # iso mutation
-        a = np.random.normal(0, (params["max"][i] - params["min"][i]) * params['sigma_iso'], 1)
+        a = params['sigma_iso'] * np.random.normal(0, 1, 1)
         y[i] = y[i] + a
 
         # line mutation
@@ -75,7 +75,7 @@ def variation_xy(x, z, params):
         # else:
         #  b = np.random.normal(0, (params["max"][i]-params["min"][i]) * params['sigma_line'], 1)
 
-        y[i] = y[i] + b * (x[i] - z[i])
+        y[i] = y[i] + b * (z[i] - x[i])
     y_bounded = np.clip(y, a_min=params["min"][0:len(y)], a_max=params["max"][0:len(y)])
     return y_bounded
 
