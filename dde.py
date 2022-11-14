@@ -123,8 +123,8 @@ def main():
     params["dump_period"] = save_freq
     params["save_format"] = 'bin'
     params["print_mod"] = print_freq
-    log_file = open('map_elites_log.dat', 'w+')
-    vae_log = open('vae_log.dat', 'w+')
+    log_file = open(os.path.join('results', exp_name, 'map_elites_log.dat'), 'w+')
+    vae_log = open(os.path.join('results', exp_name, 'vae_log.dat'), 'w+')
 
     # Tiny run testing
     # params["random_init"] = 5./float(n_niches)

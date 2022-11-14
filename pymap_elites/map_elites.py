@@ -41,6 +41,7 @@ import math
 import numpy as np
 import multiprocessing
 from pathlib import Path
+import os
 import time
 
 
@@ -137,7 +138,7 @@ default_params = {
 
 
 def __centroids_filename(k, dim):
-    return 'centroids_' + str(k) + '_' + str(dim) + '.dat'
+    return os.path.join('results', 'centroids_' + str(k) + '_' + str(dim) + '.dat')
 
 
 def __write_centroids(centroids):
