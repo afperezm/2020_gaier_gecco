@@ -1,5 +1,6 @@
 import gym
 import math
+import numpy as np
 import QDgym
 import torch
 
@@ -109,6 +110,12 @@ def evaluate(x, env_id):
 
 
 def evaluate_walker(x):
+    # total_reward, behavior_descriptor = [], []
+    # for _ in range(10):
+    #     result = evaluate(x, "QDWalker2DBulletEnv-v0")
+    #     total_reward.append(result[0])
+    #     behavior_descriptor.append(result[1])
+    # return np.mean(total_reward), np.mean(behavior_descriptor, axis=0)
     return evaluate(x, "QDWalker2DBulletEnv-v0")
 
 
@@ -131,7 +138,3 @@ class Walker:
 
     def randomInd(self, dim_x, params):
         return random_params(dim_x, params)
-
-    def random_vae_ind(self, dim_z, params):
-        z = random_params(dim_z, params)
-        return z
