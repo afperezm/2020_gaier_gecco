@@ -69,6 +69,10 @@ def main():
         d = Hex()
         d.params["random_init"] = 0.05
         n_gen = 50000
+    elif domain == 'ant':
+        from domain.locomotion.ant import Ant, evaluate_ant as evaluate
+        d = Ant(21256)
+        n_gen = 10000
     elif domain == 'walker':
         from domain.locomotion.walker import Walker, evaluate_walker as evaluate
         d = Walker(20230)
