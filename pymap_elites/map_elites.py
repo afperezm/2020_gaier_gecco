@@ -98,7 +98,7 @@ def gen_to_phen_direct(gen):
 default_params = {
     # more of this -> higher-quality CVT
     "cvt_samples": 25000,
-    # we evaluate in batches to paralleliez
+    # we evaluate in batches to parallelize
     "batch_size": 100,
     # proportion of niches to be filled before starting
     "random_init": 0.1,
@@ -277,7 +277,7 @@ def compute(dim_map, dim_x, f,
         if len(archive) == 0:  # random initialization
             print('init: ', end='', flush=True)
             while init_count <= params['random_init'] * n_niches:
-                for i in range(0, params['random_init_batch']):
+                for _ in range(0, params['random_init_batch']):
                     x = params['random'](dim_x, params)
                     x_bounded = []
                     for i in range(0, len(x)):
