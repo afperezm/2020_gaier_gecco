@@ -194,13 +194,13 @@ def archive_to_array(archive):
 
 # format: centroid fitness desc x \n
 # centroid, desc and x are vectors
-def __save_archive(archive, gen, format='bin'):
+def __save_archive(archive, gen, archive_dir, format='bin'):
     a = archive_to_array(archive)
     filename = 'archive_' + str(gen)
     if format == 'txt':
-        np.savetxt(filename + '.dat', a)
+        np.savetxt(os.path.join(archive_dir, filename + '.dat'), a)
     else:
-        np.save(filename + '.npy', a)
+        np.save(os.path.join(archive_dir, filename + '.npy'), a)
 
 
 # try to add s to the archive
@@ -254,8 +254,16 @@ def compute(dim_map, dim_x, f,
             archive={},
             centroids=np.empty(shape=(0, 0)),
             gen=0,
-            log_file=None,
+            log_filepath=None,
             pool=None):
+
+    if log_filepath:
+        log_file = open(log_filepath, 'w+')
+        archive_dir = os.path.dirname(log_filepath)
+    else:
+        log_file = None
+        archive_dir = '.'
+
     if pool is None:
         num_cores = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(num_cores)
@@ -326,7 +334,7 @@ def compute(dim_map, dim_x, f,
                                                                            np.nanmean(fit_list), gen_time))
         # write archive
         if g % params['dump_period'] == 0 and params['dump_period'] != -1:
-            __save_archive(archive, g, params['save_format'])
+            __save_archive(archive, g, archive_dir=archive_dir, format=params['save_format'])
 
         if log_file is not None:
             fit_list = np.array([x.fitness for x in archive.values()])
@@ -334,6 +342,10 @@ def compute(dim_map, dim_x, f,
                                                      len(archive.keys()), np.nanmax(fit_list), np.nanmean(fit_list),
                                                      gen_time))
             log_file.flush()
+
+    if log_file:
+        log_file.close()
+
     return archive, centroids, successes
 
 

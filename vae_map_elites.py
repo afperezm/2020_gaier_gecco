@@ -3,6 +3,7 @@ import math
 import collections
 import random
 import multiprocessing
+import os
 import scipy.spatial
 import time
 import itertools
@@ -93,7 +94,15 @@ def pop_to_array(archive):
 
 def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
                    gen=0, archive={}, centroids=np.empty(shape=(0, 0)), pool=None,
-                   model=VecVAE, latent_length=10, log_file=None, vae_log=None):
+                   model=VecVAE, latent_length=10, log_filepath=None, vae_log_filepath=None):
+
+    if vae_log_filepath:
+        vae_log = open(vae_log_filepath, 'w+')
+        archive_dir = os.path.dirname(log_filepath)
+    else:
+        vae_log = None
+        archive_dir = '.'
+
     # - Init --------------------------------------------------------------------#
     if pool is None:
         num_cores = multiprocessing.cpu_count()
@@ -102,7 +111,7 @@ def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
     if archive == {}:  # initialize map if one doesn't exist already
         archive, centroids, s = map_elites.compute(dim_map, dim_x,
                                                    f, n_niches=n_niches, n_gen=1,
-                                                   log_file=log_file, centroids=centroids)
+                                                   log_filepath=log_filepath, centroids=centroids)
 
     # Bandit
     params["prob_xover"] = params["bandit_prob_xover"][0]
@@ -122,7 +131,7 @@ def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
                                                        n_niches=n_niches, n_gen=params["trainMod"],
                                                        archive=archive, centroids=centroids,
                                                        gen=i * params["trainMod"],
-                                                       pool=pool, log_file=log_file)
+                                                       pool=pool, log_filepath=log_filepath)
             successes += [((params["prob_xover"], params["sigma_line"]), s)]
 
         params["prob_xover"], params["sigma_line"] = opt_bandit(successes, params)
@@ -151,7 +160,10 @@ def vae_map_elites(dim_map, dim_x, f, params, n_niches=1000, n_gen=1000,
         if (i % params["dump_period"]) == 0:
             vae.save('vae.pt')
 
+    if vae_log:
+        vae_log.close()
+
     # - Save final result -------------------------------------------------------#
-    map_elites.__save_archive(archive, i, params['save_format'])
+    map_elites.__save_archive(archive, i, archive_dir=archive_dir, format=params['save_format'])
     vae.save('vae.pt')
     return archive, centroids, successes

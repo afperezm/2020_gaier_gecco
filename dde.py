@@ -123,8 +123,8 @@ def main():
     params["dump_period"] = save_freq
     params["save_format"] = 'bin'
     params["print_mod"] = print_freq
-    log_file = open(os.path.join('results', exp_name, 'map_elites_log.dat'), 'w+')
-    vae_log = open(os.path.join('results', exp_name, 'vae_log.dat'), 'w+')
+    map_elites_log_path = os.path.join('results', exp_name, 'map_elites_log.dat')
+    vae_log_path = os.path.join('results', exp_name, 'vae_log.dat')
 
     # Tiny run testing
     # params["random_init"] = 5./float(n_niches)
@@ -137,7 +137,7 @@ def main():
         # params["vector_variation"] = False
         map_elites.compute(desc_length, x_dims, evaluate, params=params,
                            centroids=centroids, n_niches=num_niches, n_gen=n_gen,
-                           log_file=log_file)
+                           log_filepath=map_elites_log_path)
 
     if mode == 'line':
         params["sigma_iso"] = sigma_iso
@@ -145,15 +145,15 @@ def main():
         # params["vector_variation"] = False
         map_elites.compute(desc_length, x_dims, evaluate, params=params,
                            centroids=centroids, n_niches=num_niches, n_gen=n_gen,
-                           log_file=log_file)
+                           log_filepath=map_elites_log_path)
 
     if mode == 'vae':
         params["bandit_prob_xover"] = [0, 0.25, 0.5, .75, 1.0]
         params["bandit_line_sigma"] = [0.0]
         vae_map_elites(desc_length, x_dims, evaluate, params,
                        centroids=centroids, n_niches=num_niches, n_gen=n_gen,
-                       model=VecVAE, latent_length=latent_length, vae_log=vae_log,
-                       log_file=log_file)
+                       model=VecVAE, latent_length=latent_length, vae_log_filepath=vae_log_path,
+                       log_filepath=map_elites_log_path)
 
     if mode == 'vae_line':
         params["bandit_prob_xover"] = [0, 0.25, 0.5, .75, 1.0]
@@ -162,16 +162,16 @@ def main():
 
         vae_map_elites(desc_length, x_dims, evaluate, params,
                        centroids=centroids, n_niches=num_niches, n_gen=n_gen,
-                       model=VecVAE, latent_length=latent_length, vae_log=vae_log,
-                       log_file=log_file)
+                       model=VecVAE, latent_length=latent_length, vae_log_filepath=vae_log_path,
+                       log_filepath=map_elites_log_path)
 
     if mode == 'vae_only':
         params["bandit_prob_xover"] = [1.0]
         params["bandit_line_sigma"] = [0.0]  # this is never used
         vae_map_elites(desc_length, x_dims, evaluate, params,
                        centroids=centroids, n_niches=num_niches, n_gen=n_gen,
-                       model=VecVAE, latent_length=latent_length, vae_log=vae_log,
-                       log_file=log_file)
+                       model=VecVAE, latent_length=latent_length, vae_log_filepath=vae_log_path,
+                       log_filepath=map_elites_log_path)
 
     # -- Use Data-Driven Encoding -------------------------------------------------#
     if mode == 'dde':
@@ -200,7 +200,7 @@ def main():
         print('\n[**] Optimizing DDE with MAP-Elites [**]')
         map_elites.compute(desc_length, z_dims, evaluate, params=params,
                            centroids=centroids, n_niches=num_niches, n_gen=n_gen,
-                           log_file=log_file)
+                           log_filepath=map_elites_log_path)
 
 
 def parse_args():
