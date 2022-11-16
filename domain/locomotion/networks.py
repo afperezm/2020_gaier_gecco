@@ -77,3 +77,26 @@ class Actor(nn.Module):
 
     # def return_copy(self):
     #     return copy.deepcopy(self)
+
+
+class PolicyNet(nn.Module):
+    def __init__(self, n_in, n_out, n_hidden=64):
+        super().__init__()
+        self.fc1 = nn.Sequential(
+            nn.Linear(n_in, n_hidden),
+            nn.ReLU(inplace=True)
+        )
+        self.fc2 = nn.Sequential(
+            nn.Linear(n_hidden, n_hidden),
+            nn.ReLU(inplace=True)
+        )
+        self.fc3 = nn.Sequential(
+            nn.Linear(n_hidden, n_out),
+            nn.Softmax(dim=0)
+        )
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.fc2(x)
+        p = self.fc3(x)
+        return p

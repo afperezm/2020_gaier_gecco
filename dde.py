@@ -100,6 +100,9 @@ def main():
         from domain.locomotion.walker import Walker, evaluate_walker as evaluate
         d = Walker(20230)
         # n_gen = 100000
+    elif domain == 'lander':
+        from domain.gym.lander import LunarLander, evaluate
+        d = LunarLander(4996)
     else:
         print('Invalid Domain (e.g. hex/arm20/arm200/walker/ant)')
         exit(1)
